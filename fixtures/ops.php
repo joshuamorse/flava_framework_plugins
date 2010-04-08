@@ -66,7 +66,9 @@ function build($argv)
     db_connect();
     use_db();
 
-    // clear table
+    # Truncate table.
+    echo 'Truncating '.$argv[3].' table...'."\n\n";
+    $query = mysql_query('TRUNCATE '.$argv[3]);
 
     foreach($_fixtures as $_fixture)
     {
@@ -81,7 +83,7 @@ function build($argv)
 
       if(mysql_query($query))
       {
-        $success = 'fixtures for '.$argv[3].' have been succesfully built';
+        $success = 'fixtures for the table: '.$argv[3].' have been succesfully built!';
       }
       else
       {
