@@ -30,25 +30,21 @@ $_definition = array(
     ),
 
     'name' => array(
-      'label' => 'Name',
       'type' => 'varchar',
       'length' => 255,
     ),
 
     'location' => array(
-      'label' => 'Location',
       'type' => 'varchar',
       'length' => 255,
     ),
 
     'url' => array(
-      'label' => 'Homepage',
       'type' => 'varchar',
       'length' => 255,
     ),
 
     'bla' => array(
-      'label' => 'Bla',
       'type' => 'varchar',
       'length' => 255,
     ),

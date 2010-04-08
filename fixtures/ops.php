@@ -55,30 +55,38 @@ function build($argv)
   global $error;
   global $errors;
 
-  require_once($_plugin['dir']['fixtures'].$argv[3].'.php');
+  prompt('WARNING: Building fixtures clear all data from your table; are you sure you want to do this?')
+    or $error = $errors['aborted'];
 
-  # Let's get connected!
-  db_connect();
-  use_db();
-
-  foreach($_fixtures as $_fixture)
+  if(!$error)
   {
-    $query = ' 
-      INSERT INTO '.$argv[3].' ('.implode(',', array_keys($_fixture)).') 
-      VALUES ('.implode(',', array_values(enquote($_fixture))).')
-    ';
+    require_once($_plugin['dir']['fixtures'].$argv[3].'.php');
 
-    //add option to display this?
-    echo 'Running the following query:';
-    echo "\n".$query."\n\n";
+    # Let's get connected!
+    db_connect();
+    use_db();
 
-    if(mysql_query($query))
+    // clear table
+
+    foreach($_fixtures as $_fixture)
     {
-      $success = 'oh yeah?';
-    }
-    else
-    {
-      $error = mysql_error();
+      $query = ' 
+        INSERT INTO '.$argv[3].' ('.implode(',', array_keys($_fixture)).') 
+        VALUES ('.implode(',', array_values(enquote($_fixture))).')
+      ';
+
+      //add option to display this?
+      echo 'Running the following query:';
+      echo "\n".$query."\n\n";
+
+      if(mysql_query($query))
+      {
+        $success = 'fixtures for '.$argv[3].' have been succesfully built';
+      }
+      else
+      {
+        $error = mysql_error();
+      }   
     }   
-  }   
+  }
 }
