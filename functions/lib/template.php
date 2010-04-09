@@ -1,9 +1,34 @@
 <?php
 
-////declare_vars
-
-public function __construct()
+class song
 {
-}
+  ////declare_vars
 
-////get_methods
+  public function __construct($id)
+  {
+    $this->id = $id;
+    $this->set_values($this->fetch_values());
+  }
+
+  private function fetch_values()
+  {
+    $query = mysql_query(' 
+      SELECT *
+      FROM song
+      WHERE id = '.$this->id.'
+    ');
+
+    return mysql_fetch_assoc($query);
+  }
+
+  private function set_values($results)
+  {
+    print_r($results); die();
+    foreach($results as $field => $result)
+    {
+      $this->$field = $result;
+    }
+  }
+
+  ////get_methods
+}
