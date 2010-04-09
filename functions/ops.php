@@ -58,7 +58,13 @@ function build($argv)
   global $error;
   global $errors;
 
-  # Fetch the definition.
+  # Fetch definitions functions.
+  require(get_plugin_functions_path_for('definitions'));
+  
+  $_definition = get_definition_for($argv[3]);
+
+  print_r($_definition); die();
+
   # Fetch the template.
 
   $temp = file_get_contents('plugins/functions/lib/template.php'); 
@@ -69,6 +75,10 @@ function build($argv)
 
   $temp = str_replace('////declare_vars', $str, $temp);
   $temp = str_replace('////declare_vars', 'omogmgomgomg', $temp);
+
+  # Write the base functions file.
+  $handle = fopen('tmp_test/test.php', 'w');
+  fwrite($handle, $temp);
 
   die($temp);
 }
