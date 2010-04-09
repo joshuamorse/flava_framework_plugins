@@ -88,6 +88,7 @@ function build($argv)
   $_functions = file_get_contents('plugins/functions/lib/template.php'); 
 
   # Replace the place holders.
+  $_functions = str_replace('%table%', $_definition['name'], $_functions);
   $_functions = str_replace('////declare_vars', $_declare_fields, $_functions);
   $_functions = str_replace('////get_methods', $_get_methods, $_functions);
 

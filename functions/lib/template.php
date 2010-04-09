@@ -13,7 +13,7 @@ class song
   {
     $query = mysql_query(' 
       SELECT *
-      FROM song
+      FROM %table%
       WHERE id = '.$this->id.'
     ');
 
@@ -28,4 +28,7 @@ class song
     }
   }
 ////get_methods
+////one_to_one_methods
+////one_to_many_methods
+////many_to_many_methods
 }
