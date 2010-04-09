@@ -1,6 +1,6 @@
 <?php
 
-class song
+class %table_base%
 {
 ////declare_vars
   public function __construct($id)
@@ -11,11 +11,7 @@ class song
 
   private function fetch_values()
   {
-    $query = mysql_query(' 
-      SELECT *
-      FROM %table%
-      WHERE id = '.$this->id.'
-    ');
+    $query = mysql_query('SELECT * FROM %table% WHERE id = '.$this->id);
 
     return mysql_fetch_assoc($query);
   }

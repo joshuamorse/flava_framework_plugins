@@ -66,22 +66,31 @@ function build($argv)
   //print_r($_definition); die();
 
   # Build declare fields string.
+
   $_declare_fields = '';
+  $_get_methods = '';
+  $_one_to_one_methods = '';
 
   foreach($_definition['fields'] as $field => $data)
   {
     $_declare_fields .= "\t".'private $'.$field.';'."\n"; 
-  }
 
-  # Build get methods string.
-  $_get_methods = '';
-
-  foreach($_definition['fields'] as $field => $data)
-  {
     $_get_methods .= "\n\t".'public function get_'.$field.'()'."\n"; 
     $_get_methods .= "\t".'{'."\n"; 
     $_get_methods .= "\t\t".'return $this->'.$field.';'."\n"; 
     $_get_methods .= "\t".'}'."\n"; 
+
+    if(isset($data['relation']))
+    {
+      if($data['relation']['type'] == 'one')
+      {
+        $_one_to_one_methods .= "\n\t".'public function get_'.$data['relation']['name'].'()'."\n"; 
+        $_one_to_one_methods .= "\t".'{'."\n"; 
+        $_one_to_one_methods .= "\t\t".'$query = mysql_query(\'SELECT * FROM '.$data['relation']['name'].' WHERE id = \'.$this->'.$field.');'."\n"; 
+        $_one_to_one_methods .= "\t\t".'return mysql_fetch_assoc($query);'."\n"; 
+        $_one_to_one_methods .= "\t".'}'."\n"; 
+      }
+    }
   }
 
   # Fetch the template. Change this to example.php?
@@ -89,8 +98,10 @@ function build($argv)
 
   # Replace the place holders.
   $_functions = str_replace('%table%', $_definition['name'], $_functions);
+  $_functions = str_replace('%table_base%', $_definition['name'].'_base', $_functions);
   $_functions = str_replace('////declare_vars', $_declare_fields, $_functions);
   $_functions = str_replace('////get_methods', $_get_methods, $_functions);
+  $_functions = str_replace('////one_to_one_methods', $_one_to_one_methods, $_functions);
 
   # Write the base functions file.
   $handle = fopen('tmp_test/test.php', 'w');
