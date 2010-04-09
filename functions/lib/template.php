@@ -23,7 +23,6 @@ class song
 
   private function set_values($results)
   {
-    print_r($results); die();
     foreach($results as $field => $result)
     {
       $this->$field = $result;

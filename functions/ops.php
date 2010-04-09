@@ -51,3 +51,24 @@ function uninstall()
   $success = $_plugin['name'].' was successfully uninstalled';
 }
 
+function build($argv)
+{
+  global $_plugin;
+  global $success;
+  global $error;
+  global $errors;
+
+  # Fetch the definition.
+  # Fetch the template.
+
+  $temp = file_get_contents('plugins/functions/lib/template.php'); 
+
+  $str = '';
+  $str .= 'private $var;'."\n";
+  $str .= "\t".'private $other_var;'."\n";
+
+  $temp = str_replace('////declare_vars', $str, $temp);
+  $temp = str_replace('////declare_vars', 'omogmgomgomg', $temp);
+
+  die($temp);
+}
