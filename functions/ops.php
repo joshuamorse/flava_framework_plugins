@@ -63,22 +63,37 @@ function build($argv)
   
   $_definition = get_definition_for($argv[3]);
 
-  print_r($_definition); die();
+  //print_r($_definition); die();
 
-  # Fetch the template.
+  # Build declare fields string.
+  $_declare_fields = '';
 
-  $temp = file_get_contents('plugins/functions/lib/template.php'); 
+  foreach($_definition['fields'] as $field => $data)
+  {
+    $_declare_fields .= "\t".'private $'.$field.';'."\n"; 
+  }
 
-  $str = '';
-  $str .= 'private $var;'."\n";
-  $str .= "\t".'private $other_var;'."\n";
+  # Build get methods string.
+  $_get_methods = '';
 
-  $temp = str_replace('////declare_vars', $str, $temp);
-  $temp = str_replace('////declare_vars', 'omogmgomgomg', $temp);
+  foreach($_definition['fields'] as $field => $data)
+  {
+    $_get_methods .= "\n\t".'public function get_'.$field.'()'."\n"; 
+    $_get_methods .= "\t".'{'."\n"; 
+    $_get_methods .= "\t\t".'return $this->'.$field.';'."\n"; 
+    $_get_methods .= "\t".'}'."\n"; 
+  }
+
+  # Fetch the template. Change this to example.php?
+  $_functions = file_get_contents('plugins/functions/lib/template.php'); 
+
+  # Replace the place holders.
+  $_functions = str_replace('////declare_vars', $_declare_fields, $_functions);
+  $_functions = str_replace('////get_methods', $_get_methods, $_functions);
 
   # Write the base functions file.
   $handle = fopen('tmp_test/test.php', 'w');
-  fwrite($handle, $temp);
+  fwrite($handle, $_functions);
 
   die($temp);
 }

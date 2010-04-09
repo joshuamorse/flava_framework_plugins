@@ -2,8 +2,7 @@
 
 class song
 {
-  ////declare_vars
-
+////declare_vars
   public function __construct($id)
   {
     $this->id = $id;
@@ -28,6 +27,5 @@ class song
       $this->$field = $result;
     }
   }
-
-  ////get_methods
+////get_methods
 }
