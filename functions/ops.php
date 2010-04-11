@@ -94,7 +94,7 @@ function build($argv)
   }
 
   # Fetch the template. Change this to example.php?
-  $_functions = file_get_contents('plugins/functions/lib/template.php'); 
+  $_functions = file_get_contents('plugins/functions/lib/base_template.php'); 
 
   # Replace the place holders.
   $_functions = str_replace('%table%', $_definition['name'], $_functions);
@@ -104,8 +104,30 @@ function build($argv)
   $_functions = str_replace('////one_to_one_methods', $_one_to_one_methods, $_functions);
 
   # Write the base functions file.
-  $handle = fopen('tmp_test/test.php', 'w');
-  fwrite($handle, $_functions);
+  $handle = fopen($_plugin['dir']['base'].$_definition['name'].'.php', 'w');
 
-  die($temp);
+  if(fwrite($handle, $_functions))
+  {
+    $success = 'successfully built functions for '.$_definition['name'].'!';
+  }
+
+  # Write the user functions file, if none exists.
+  $_user_function_path = $_plugin['dir']['user'].$_definition['name'].'.php';
+
+  if(!file_exists($_user_function_path))
+  {
+    # Fetch the user template.
+    $_functions = file_get_contents('plugins/functions/lib/user_template.php'); 
+
+    $_functions = str_replace('%table_base%', $_definition['name'].'_base', $_functions);
+    $_functions = str_replace('%table_user%', $_definition['name'], $_functions);
+
+    # Write the user functions file.
+    $handle = fopen($_plugin['dir']['user'].$_definition['name'].'.php', 'w');
+
+    if(fwrite($handle, $_functions))
+    {
+      $success = 'successfully built functions for '.$_definition['name'].'!';
+    }
+  }
 }
